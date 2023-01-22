@@ -34796,7 +34796,7 @@ module.exports = reloadCSS;
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/App.js":[function(require,module,exports) {
+},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/LoginForm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -34805,14 +34805,94 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+class LoginForm extends _react.default.Component {
+  render() {
+    return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("form", {
+      id: "loginForm"
+    }, /*#__PURE__*/_react.default.createElement("h2", null, " Login"), /*#__PURE__*/_react.default.createElement("input", {
+      id: "username",
+      placeholder: "Enter username",
+      maxLength: 20
+    }), /*#__PURE__*/_react.default.createElement("input", {
+      id: "password",
+      placeholder: "Enter password"
+    }), /*#__PURE__*/_react.default.createElement("button", {
+      id: "submitCredentials"
+    }, "Submit credentials")));
+  }
+}
+var _default = LoginForm;
+exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"components/ArticleForm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const ArticleForm = () => {
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("form", {
+    id: "form"
+  }, /*#__PURE__*/_react.default.createElement("h2", null, " Create Article"), /*#__PURE__*/_react.default.createElement("input", {
+    maxLength: 50,
+    placeHolder: "Enter title"
+  }), /*#__PURE__*/_react.default.createElement("textarea", {
+    maxLength: 200,
+    placeHolder: "Enter text",
+    id: "text"
+  }), /*#__PURE__*/_react.default.createElement("select", {
+    id: "topic"
+  }, /*#__PURE__*/_react.default.createElement("option", {
+    value: ""
+  }, "-- Select topic --"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "JavaScript"
+  }, "JavaScript"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "React"
+  }, "React"), /*#__PURE__*/_react.default.createElement("option", {
+    value: "Node"
+  }, "Node")), /*#__PURE__*/_react.default.createElement("button", {
+    id: "submitArticle"
+  }, "Submit")));
+};
+var _default = ArticleForm;
+exports.default = _default;
+},{"react":"node_modules/react/index.js"}],"components/App.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _reactRouterDom = require("react-router-dom");
+var _LoginForm = _interopRequireDefault(require("./LoginForm"));
+var _ArticleForm = _interopRequireDefault(require("./ArticleForm"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function App() {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "App"
-  }, /*#__PURE__*/_react.default.createElement("h1", null, " Test "));
+  }, /*#__PURE__*/_react.default.createElement("button", {
+    id: "logout"
+  }, "Logout"), /*#__PURE__*/_react.default.createElement("h1", null, " Advanced Applications "), /*#__PURE__*/_react.default.createElement("div", null), /*#__PURE__*/_react.default.createElement("nav", null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    id: "loginScreen",
+    to: "/"
+  }, "Login"), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+    id: "articlesScreen",
+    to: "/articles"
+  }, "Articles")), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Routes, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    path: "/",
+    element: /*#__PURE__*/_react.default.createElement(_LoginForm.default, null)
+  }), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+    exact: true,
+    path: "articles",
+    element: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_ArticleForm.default, null))
+  })));
 }
 var _default = App;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"index.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/dist/index.js","./LoginForm":"components/LoginForm.js","./ArticleForm":"components/ArticleForm.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -34821,12 +34901,14 @@ var _reactDom = _interopRequireDefault(require("react-dom"));
 require("./styles/styles.css");
 var _App = _interopRequireDefault(require("./components/App"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+//import "./styles/reset.css";
+
 /**
  * Dependencies:
  *
  * npm install react
  * npm install parcel-bundler
- *
+ * npm install react-router-dom
  *
  */
 
@@ -34857,7 +34939,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55405" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57807" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
