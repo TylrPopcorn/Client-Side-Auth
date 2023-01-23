@@ -5,8 +5,8 @@ const ArticleForm = () => {
     <div>
       <form id="form">
         <h2> Create Article</h2>
-        <input maxLength={50} placeHolder="Enter title" />
-        <textarea maxLength={200} placeHolder="Enter text" id="text" />
+        <input maxLength={50} placeholder="Enter title" />
+        <textarea maxLength={200} placeholder="Enter text" id="text" />
 
         <select id="topic">
           <option value="">-- Select topic --</option>

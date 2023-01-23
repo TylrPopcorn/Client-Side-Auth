@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 //import "./styles/reset.css";
 import "./styles/styles.css";
 import App from "./components/App";
@@ -11,7 +11,7 @@ import App from "./components/App";
  * npm install react
  * npm install parcel-bundler
  * npm install react-router-dom
- *
+ * npm install axios
  */
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
