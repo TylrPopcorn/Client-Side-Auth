@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 
+import Articles from "./Articles";
 import LoginForm from "./LoginForm";
 import ArticleForm from "./ArticleForm";
 
 function App() {
+  const [articles, setArticles] = useState([]);
   const navigate = useNavigate();
 
   function logout() {
@@ -17,7 +19,7 @@ function App() {
       <button id="logout" onClick={logout}>
         Logout
       </button>
-      <h1> Advanced Applications </h1>
+      <h1> Client-Side Auth </h1>
 
       <nav>
         <Link id="loginScreen" to="/">
@@ -35,7 +37,8 @@ function App() {
           path="articles"
           element={
             <>
-              <ArticleForm />
+              <ArticleForm navigate={navigate} />
+              <Articles articles={articles} setArticles={setArticles} />
             </>
           }
         />
