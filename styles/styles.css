@@ -12,6 +12,14 @@ code {
     monospace;
 }
 
+#error {
+  color: red;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  -webkit-text-stroke-width: 0.05px;
+  -webkit-text-stroke-color: black;
+}
+
 #root,
 #wrapper {
   display: flex;
@@ -23,9 +31,11 @@ code {
 h1 {
   font-size: 1.8rem;
   line-height: 4rem;
+  text-align: center;
 }
 
 h2 {
+  text-align: center;
   width: 100%;
   font-size: 1.3rem;
   margin-bottom: 2rem;
@@ -34,16 +44,28 @@ h2 {
 #logout {
   position: absolute;
   top: 5px;
+  right: 20px;
+  border-radius: 5px;
 }
+
+nav {
+  display: flex;
+  justify-content: center;
+}
+
 nav a {
   line-height: 4rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #484848;
+  color: #0c409b;
+}
+
+nav a:active {
+  color: #a7dd12;
 }
 
 nav a.active {
-  color: #758c00;
+  color: #a7dd12;
 }
 
 button:active {
@@ -90,7 +112,7 @@ textarea {
   border: 1px solid #dddddd;
   background-color: white;
   outline: none;
-  width: 100%;
+  width: 97%;
   height: 2.4rem;
 }
 

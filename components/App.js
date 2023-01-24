@@ -1,15 +1,23 @@
 import React from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 
 import LoginForm from "./LoginForm";
 import ArticleForm from "./ArticleForm";
 
 function App() {
+  const navigate = useNavigate();
+
+  function logout() {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
+
   return (
     <div className="App">
-      <button id="logout">Logout</button>
+      <button id="logout" onClick={logout}>
+        Logout
+      </button>
       <h1> Advanced Applications </h1>
-      <div>{/** ERROR TEXT */}</div>
 
       <nav>
         <Link id="loginScreen" to="/">
@@ -21,7 +29,7 @@ function App() {
       </nav>
 
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/" element={<LoginForm navigate={navigate} />} />
         <Route
           exact
           path="articles"
