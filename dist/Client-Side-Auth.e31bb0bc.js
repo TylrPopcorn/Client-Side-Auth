@@ -34828,21 +34828,28 @@ module.hot.accept(reloadCSS);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.initialArticles = exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+const initialArticles = [{
+  article_id: 1,
+  topic: "random",
+  title: "article 1",
+  text: "It was difficult for Mary to admit that most of her workout consisted of exercising poor judgment."
+}, {
+  article_id: 2,
+  topic: "random",
+  title: "article 2",
+  text: "He found the chocolate covered roaches quite tasty."
+}];
+
 //External function
+exports.initialArticles = initialArticles;
 const getArticles = props => {
   const {
     setArticles
   } = props;
-  const initialArticles = [{
-    article_id: 1,
-    topic: "random",
-    title: "article 1",
-    text: "It was difficult for Mary to admit that most of her workout consisted of exercising poor judgment."
-  }];
   setArticles(initialArticles);
 };
 const Articles = props => {
@@ -34861,7 +34868,11 @@ const Articles = props => {
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "article",
       key: article.article_id
-    }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h3", null, article.title), /*#__PURE__*/_react.default.createElement("p", null, article.text), /*#__PURE__*/_react.default.createElement("p", null, "topic: ", article.topic)));
+    }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("h3", null, article.title.trim()), /*#__PURE__*/_react.default.createElement("p", {
+      className: "topic"
+    }, "topic: ", article.topic.trim()), /*#__PURE__*/_react.default.createElement("p", {
+      className: "articleText"
+    }, article.text.trim())));
   }) : /*#__PURE__*/_react.default.createElement("h1", null, " None "));
 };
 var _default = Articles;
@@ -35003,14 +35014,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
+var _Articles = require("./Articles");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 //External function.
-function postArticle(article, _ref) {
-  let {
-    props
-  } = _ref;
-  props.SetError("");
+function postArticle(article) {
+  _Articles.initialArticles.push(article);
+  //Reset form
+  //Put style on new article elements pushed to the articles
+  //update the articles list after submition
+  console.log(_Articles.initialArticles);
 }
 const ArticleForm = props => {
   const {
@@ -35042,9 +35055,19 @@ const ArticleForm = props => {
   }
   function onSubmit(evt) {
     evt.preventDefault();
-    postArticle(state, {
-      setError
-    });
+    const article = {
+      title: state.title.trim(),
+      text: state.text.trim(),
+      topic: state.topic
+    };
+    if (article.title.length > 0 && article.text.length > 0 && article.topic !== "") {
+      postArticle(article);
+    } else {
+      setError("Invalid form data");
+      setTimeout(() => {
+        setError("");
+      }, 2000);
+    }
   }
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("p", {
     id: "error"
@@ -35054,15 +35077,19 @@ const ArticleForm = props => {
   }, /*#__PURE__*/_react.default.createElement("h2", null, " Create Article"), /*#__PURE__*/_react.default.createElement("input", {
     maxLength: 50,
     placeholder: "Enter title",
-    onChange: onChange
+    onChange: onChange,
+    value: state.title,
+    id: "title"
   }), /*#__PURE__*/_react.default.createElement("textarea", {
     maxLength: 200,
     placeholder: "Enter text",
     id: "text",
+    value: state.text,
     onChange: onChange
   }), /*#__PURE__*/_react.default.createElement("select", {
     id: "topic",
-    onChange: onChange
+    onChange: onChange,
+    value: state.topic
   }, /*#__PURE__*/_react.default.createElement("option", {
     value: ""
   }, "-- Select topic --"), /*#__PURE__*/_react.default.createElement("option", {
@@ -35077,7 +35104,7 @@ const ArticleForm = props => {
 };
 var _default = ArticleForm;
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"components/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","./Articles":"components/Articles.js"}],"components/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35175,7 +35202,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59580" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55616" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
