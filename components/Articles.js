@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
+
 export const initialArticles = [
+  //All of the articles.
   {
-    article_id: 1,
-    topic: "random",
-    title: "article 1",
-    text: "It was difficult for Mary to admit that most of her workout consisted of exercising poor judgment.",
+    article_id: 1, //id
+    topic: "random", //topic
+    title: "article 1", //title
+    text: "It was difficult for Mary to admit that most of her workout consisted of exercising poor judgment.", //body/text
   },
 
   {
@@ -15,40 +17,39 @@ export const initialArticles = [
   },
 ];
 
-//External function
-const getArticles = (props) => {
-  const { setArticles } = props;
+//External function ---------:
+function showArticles(articles) {
+  console.log(articles, "<-----");
 
-  setArticles(initialArticles);
-};
+  return articles.map((article) => {
+    return (
+      <div className="article" key={article.article_id}>
+        <div>
+          <h3>{article.title.trim()}</h3>
+          <p className="topic">topic: {article.topic.trim()}</p>
+          <p className="articleText">{article.text.trim()}</p>
+        </div>
+      </div>
+    );
+  });
+}
 
+//---Main component:-----
 const Articles = (props) => {
-  const { articles, setArticles } = props;
-
-  useEffect(() => {
-    getArticles({ setArticles: setArticles });
-  }, [setArticles]);
+  //Main main
+  const { articles } = props; //props passed down from app.
 
   return (
+    //html
     <div className="articles">
-      <h2> Articles </h2>
+      <h2> Articles </h2> {/* Tittle*/}
       {articles.length > 0 ? (
-        articles.map((article) => {
-          return (
-            <div className="article" key={article.article_id}>
-              <div>
-                <h3>{article.title.trim()}</h3>
-                <p className="topic">topic: {article.topic.trim()}</p>
-                <p className="articleText">{article.text.trim()}</p>
-              </div>
-            </div>
-          );
-        })
+        showArticles(articles)
       ) : (
-        <h1> None </h1>
+        <h2> None </h2> /* Title */
       )}
     </div>
   );
 };
 
-export default Articles;
+export default Articles; //exports.

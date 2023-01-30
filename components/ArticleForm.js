@@ -1,67 +1,92 @@
 import React, { useEffect, useState } from "react";
-import { initialArticles } from "./Articles";
-//External function.
-function postArticle(article) {
-  initialArticles.push(article);
-  //Reset form
-  //Put style on new article elements pushed to the articles
-  //update the articles list after submition
-  console.log(initialArticles);
+const initialFormData = {
+  //Initial data for the article form.
+  title: "", //--
+  text: "", //--
+  topic: "", //--
+};
+
+//External function(s). -------:
+function postArticle(article, Articles, setArticles) {
+  //Used to add a new article to the articles
+  try {
+    Articles.push(article); //add the new article
+    setArticles([...Articles]); //update the articles
+  } catch (err) {
+    console.log(err.message); //output error message
+    return false;
+  }
+
+  return true; //return success
 }
 
+function verifyAuth(navigate) {
+  //Used to verify if the user is logged in or not.
+  const token = localStorage.getItem("token"); //Check for a token
+
+  if (token == null) {
+    //IF the user is NOT logged in,
+    navigate("/"); //redirect the user back to the homepage.
+  }
+}
+//
+//
+//Main function ---------------:
 const ArticleForm = (props) => {
-  const { navigate } = props;
-  const [state, setState] = useState({
-    title: "",
-    text: "",
-    topic: "",
-  });
-  const [error, setError] = useState("");
+  const { navigate, Error, Articles, setArticles } = props; //props passed down from app
+  const [state, setState] = useState(initialFormData); //Used to keep track of form data
 
   useEffect(() => {
+    //After the page has loaded.
     setTimeout(() => {
-      const token = localStorage.getItem("token");
-
-      if (token == null) {
-        navigate("/");
-      }
+      verifyAuth(navigate); //verify if the usr is logged in or not.
     }, 2);
-  }, [navigate]);
+  }, [navigate, Articles]);
 
   function onChange(evt) {
-    const { id, value } = evt.target;
-    setState({ ...state, [id]: value });
+    //EACH time the form gets changed
+    const { id, value } = evt.target; //grab the element that changed
+    setState({ ...state, [id]: value }); //Update the form data.
   }
 
   function onSubmit(evt) {
-    evt.preventDefault();
+    //EACH time the form gets submitted
+    evt.preventDefault(); //prevent page from reloading.
     const article = {
+      //data that will be passed into the article (trimmed):
+      article_id: Articles.length + 1,
       title: state.title.trim(),
-      text: state.text.trim(),
       topic: state.topic,
+      text: state.text.trim(),
     };
 
     if (
+      //IF the article is successfully filled out then
       article.title.length > 0 &&
       article.text.length > 0 &&
       article.topic !== ""
     ) {
-      postArticle(article);
+      const success = postArticle(article, Articles, setArticles); //Post the article
+      if (success) {
+        //IF the article successfully posted then
+        setState(initialFormData); //clear the form
+      } else {
+        Error("Failed to submit article"); //Call an error
+      }
     } else {
-      setError("Invalid form data");
-
-      setTimeout(() => {
-        setError("");
-      }, 2000);
+      //else
+      Error("Invalid form data"); //Call an error
     }
   }
 
   return (
+    //html
     <div>
-      <p id="error">{error}</p>
       <form id="form" onSubmit={onSubmit}>
-        <h2> Create Article</h2>
+        {/*Form*/}
+        <h2> Create Article</h2> {/* Title of page */}
         <input
+          //Title
           maxLength={50}
           placeholder="Enter title"
           onChange={onChange}
@@ -69,13 +94,14 @@ const ArticleForm = (props) => {
           id="title"
         />
         <textarea
+          //Body text
           maxLength={200}
           placeholder="Enter text"
           id="text"
           value={state.text}
           onChange={onChange}
         />
-
+        {/*Choose topic*/}
         <select id="topic" onChange={onChange} value={state.topic}>
           <option value="">-- Select topic --</option>
           <option value="JavaScript">JavaScript</option>

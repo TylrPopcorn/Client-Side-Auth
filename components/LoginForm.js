@@ -21,7 +21,6 @@ class LoginForm extends React.Component {
       //Set a(n) initial state
       LoginInfo: { username: "", password: "" },
       buttonDisabled: false,
-      error: "",
     };
   }
   // -------------------------------- \\
@@ -43,6 +42,7 @@ class LoginForm extends React.Component {
     //Each time the form gets submitted.
     //console.log(evt);
     const { username, password } = this.state.LoginInfo; //grab info needed.
+    const { Error } = this.props; //Error passed down in props.
 
     if (username.trim().length > 0 && password.trim().length > 0) {
       //IF the form has valid information within it.
@@ -50,14 +50,15 @@ class LoginForm extends React.Component {
     } else {
       this.setState({
         ...this.state,
-        error: "Please provide valid login information",
-        buttonDisabled: true,
+        buttonDisabled: true, //disable the form button
       });
+
+      Error("Please provide valid login information"); //invoke the error function
     }
 
     setTimeout(() => {
       //Delay
-      this.setState({ ...this.state, buttonDisabled: false, error: "" }); //Activate the form button again
+      this.setState({ ...this.state, buttonDisabled: false }); //Activate the form button again
     }, 1500);
   };
 
@@ -77,7 +78,6 @@ class LoginForm extends React.Component {
     //Render items to the page for the user to view
     return (
       <div>
-        <p id="error">{this.state.error}</p>
         <form
           id="loginForm"
           onSubmit={(evt) => {
