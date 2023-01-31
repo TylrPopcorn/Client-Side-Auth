@@ -11,7 +11,6 @@ import App from "./components/App";
  * npm install react
  * npm install parcel-bundler
  * npm install react-router-dom
- *
  */
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

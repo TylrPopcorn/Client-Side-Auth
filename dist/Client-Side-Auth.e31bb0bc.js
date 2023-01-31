@@ -35302,7 +35302,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * npm install react
  * npm install parcel-bundler
  * npm install react-router-dom
- *
  */
 
 const root = _client.default.createRoot(document.getElementById("root"));
