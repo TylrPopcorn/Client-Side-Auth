@@ -34831,6 +34831,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.initialArticles = exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+let props; //Used to hold props for the rest of the script to use.
 const initialArticles = [
 //All of the articles.
 {
@@ -34847,12 +34848,25 @@ const initialArticles = [
   title: "article 2",
   text: "He found the chocolate covered roaches quite tasty."
 }];
-
+//----------- --------- ----------  ------------
 //External function ---------:
 exports.initialArticles = initialArticles;
+function deleteArticle(article) {
+  //Used to delete an article of choice.
+  const {
+    setArticles
+  } = props;
+  setArticles({
+    type: "DELETE",
+    payload: article
+  }); //Delete an article.
+}
+
 function showArticles(articles) {
-  console.log(articles, "<-----");
+  //Used to show any articles in the array.
+
   return articles.map(article => {
+    //Map over each article
     return /*#__PURE__*/_react.default.createElement("div", {
       className: "article",
       key: article.article_id
@@ -34860,13 +34874,21 @@ function showArticles(articles) {
       className: "topic"
     }, "topic: ", article.topic.trim()), /*#__PURE__*/_react.default.createElement("p", {
       className: "articleText"
-    }, article.text.trim())));
+    }, article.text.trim()), /*#__PURE__*/_react.default.createElement("button", {
+      id: "delete_button",
+      onClick: () => {
+        //on click, delete an article
+        deleteArticle(article);
+      }
+    }, "Delete")));
   });
 }
 
 //---Main component:-----
-const Articles = props => {
+const Articles = p => {
   //Main main
+  props = p; //Update the main variable for the rest of the script to use.
+
   const {
     articles
   } = props; //props passed down from app.
@@ -34881,7 +34903,40 @@ const Articles = props => {
 };
 var _default = Articles; //exports.
 exports.default = _default;
-},{"react":"node_modules/react/index.js"}],"components/LoginForm.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js"}],"reducers/ArticlesReducer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+//Reducer to help regulate Articles state
+const ArticlesReducer = (state, action) => {
+  switch (action.type //Switch statement
+  ) {
+    case "ADD":
+      {
+        //To add an article
+        state.push(action.payload);
+        return state;
+      }
+    case "DELETE":
+      {
+        const newState = state.filter(item => {
+          //filter through the articles
+          return item.article_id !== action.payload.article_id; //return any article that is NOT the specified article
+        });
+
+        return newState;
+      }
+    default:
+      //return regular state if command not found
+      return state;
+  }
+};
+var _default = ArticlesReducer; //export
+exports.default = _default;
+},{}],"components/LoginForm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35021,6 +35076,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+let props; //Used to hold props..
 const initialFormData = {
   //Initial data for the article form.
   title: "",
@@ -35029,17 +35085,19 @@ const initialFormData = {
   //--
   topic: "" //--
 };
-
+//-----------------
 //External function(s). -------:
-function postArticle(article, Articles, setArticles) {
+
+function postArticle(article) {
   //Used to add a new article to the articles
-  try {
-    Articles.push(article); //add the new article
-    setArticles([...Articles]); //update the articles
-  } catch (err) {
-    console.log(err.message); //output error message
-    return false;
-  }
+  const {
+    setArticles
+  } = props;
+  setArticles({
+    type: "ADD",
+    payload: article
+  }); //add an article
+
   return true; //return success
 }
 
@@ -35055,12 +35113,13 @@ function verifyAuth(navigate) {
 //
 //
 //Main function ---------------:
-const ArticleForm = props => {
+const ArticleForm = p => {
+  props = p; //update the props variable to be used for the rest of the script.
+
   const {
     navigate,
     Error,
-    Articles,
-    setArticles
+    Articles
   } = props; //props passed down from app
   const [state, setState] = (0, _react.useState)(initialFormData); //Used to keep track of form data
 
@@ -35069,7 +35128,7 @@ const ArticleForm = props => {
     setTimeout(() => {
       verifyAuth(navigate); //verify if the usr is logged in or not.
     }, 2);
-  }, [navigate, Articles]);
+  }, [navigate]);
   function onChange(evt) {
     //EACH time the form gets changed
     const {
@@ -35095,10 +35154,11 @@ const ArticleForm = props => {
     if (
     //IF the article is successfully filled out then
     article.title.length > 0 && article.text.length > 0 && article.topic !== "") {
-      const success = postArticle(article, Articles, setArticles); //Post the article
+      const success = postArticle(article); //Post the article
       if (success) {
         //IF the article successfully posted then
         setState(initialFormData); //clear the form
+        navigate("articles"); //update the page i guess
       } else {
         Error("Failed to submit article"); //Call an error
       }
@@ -35157,6 +35217,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _reactRouterDom = require("react-router-dom");
 var _Articles = _interopRequireWildcard(require("./Articles"));
+var _ArticlesReducer = _interopRequireDefault(require("../reducers/ArticlesReducer"));
 var _LoginForm = _interopRequireDefault(require("./LoginForm"));
 var _ArticleForm = _interopRequireDefault(require("./ArticleForm"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -35166,7 +35227,7 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function App() {
   //Main function
-  const [articles, setArticles] = (0, _react.useState)(_Articles.initialArticles); //Used to hold all of the articles.
+  const [articles, setArticles] = (0, _react.useReducer)(_ArticlesReducer.default, _Articles.initialArticles);
   const [error, setError] = (0, _react.useState)(""); //Used to show any errors.
   const navigate = (0, _reactRouterDom.useNavigate)(); //Used to redirect the user.
 
@@ -35216,14 +35277,15 @@ function App() {
         Articles: articles,
         setArticles: setArticles
       }), /*#__PURE__*/_react.default.createElement(_Articles.default, {
-        articles: articles
+        articles: articles,
+        setArticles: setArticles
       }))
     })))
   );
 }
 var _default = App;
 exports.default = _default;
-},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/dist/index.js","./Articles":"components/Articles.js","./LoginForm":"components/LoginForm.js","./ArticleForm":"components/ArticleForm.js"}],"index.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/dist/index.js","./Articles":"components/Articles.js","../reducers/ArticlesReducer":"reducers/ArticlesReducer.js","./LoginForm":"components/LoginForm.js","./ArticleForm":"components/ArticleForm.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -35270,7 +35332,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64631" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49499" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

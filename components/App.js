@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 
 import { initialArticles } from "./Articles";
+import ArticlesReducer from "../reducers/ArticlesReducer";
 //------
 import Articles from "./Articles";
 import LoginForm from "./LoginForm";
@@ -9,7 +10,7 @@ import ArticleForm from "./ArticleForm";
 
 function App() {
   //Main function
-  const [articles, setArticles] = useState(initialArticles); //Used to hold all of the articles.
+  const [articles, setArticles] = useReducer(ArticlesReducer, initialArticles);
   const [error, setError] = useState(""); //Used to show any errors.
   const navigate = useNavigate(); //Used to redirect the user.
 
@@ -64,7 +65,7 @@ function App() {
                 Articles={articles}
                 setArticles={setArticles}
               />
-              <Articles articles={articles} />
+              <Articles articles={articles} setArticles={setArticles} />
             </>
           }
         />

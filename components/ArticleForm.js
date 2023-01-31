@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from "react";
+
+let props; //Used to hold props..
 const initialFormData = {
   //Initial data for the article form.
   title: "", //--
   text: "", //--
   topic: "", //--
 };
-
+//-----------------
 //External function(s). -------:
-function postArticle(article, Articles, setArticles) {
+
+function postArticle(article) {
   //Used to add a new article to the articles
-  try {
-    Articles.push(article); //add the new article
-    setArticles([...Articles]); //update the articles
-  } catch (err) {
-    console.log(err.message); //output error message
-    return false;
-  }
+  const { setArticles } = props;
+  setArticles({ type: "ADD", payload: article }); //add an article
 
   return true; //return success
 }
@@ -32,8 +30,10 @@ function verifyAuth(navigate) {
 //
 //
 //Main function ---------------:
-const ArticleForm = (props) => {
-  const { navigate, Error, Articles, setArticles } = props; //props passed down from app
+const ArticleForm = (p) => {
+  props = p; //update the props variable to be used for the rest of the script.
+
+  const { navigate, Error, Articles } = props; //props passed down from app
   const [state, setState] = useState(initialFormData); //Used to keep track of form data
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const ArticleForm = (props) => {
     setTimeout(() => {
       verifyAuth(navigate); //verify if the usr is logged in or not.
     }, 2);
-  }, [navigate, Articles]);
+  }, [navigate]);
 
   function onChange(evt) {
     //EACH time the form gets changed
@@ -66,10 +66,11 @@ const ArticleForm = (props) => {
       article.text.length > 0 &&
       article.topic !== ""
     ) {
-      const success = postArticle(article, Articles, setArticles); //Post the article
+      const success = postArticle(article); //Post the article
       if (success) {
         //IF the article successfully posted then
         setState(initialFormData); //clear the form
+        navigate("articles"); //update the page i guess
       } else {
         Error("Failed to submit article"); //Call an error
       }
