@@ -11,7 +11,7 @@ This is a practice example that provides a clear example of how to use **basic**
 1. Enter any kind of login information into the form input and press submit.
 2. After logging in, you can view different articles that might be in the database.
 3. You have the option to add or delete any articles of your choice.
-4. After you are finished, you can logout
+4. After you are finished, you can logout.
 
 
 <img width="782" alt="Screenshot 2023-01-31 at 6 41 09 PM" src="https://user-images.githubusercontent.com/104395322/215908775-a944bfbd-a6a6-4f33-abb3-f5cf7cd4b361.png">
