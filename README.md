@@ -18,3 +18,5 @@ This is a practice example that provides a clear example of how to use **basic**
 
 
 
+  # Related Projects
+-  [Projects List](https://github.com/TylrPopcorn/Projects-List) - *Explore other projects I have worked on*
